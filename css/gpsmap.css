@@ -1,0 +1,17 @@
+div.ui-datepicker{
+ font-size:10px;
+}
+
+#datepicker {
+  position:absolute;
+  left:120px;
+  top:10px;
+  width:76px;
+  height:29px;
+  border-radius: 2px;
+  border: 1px solid white;
+  padding-top: 1px;
+  padding-left: 6px;
+  z-index: 99;
+}
+
