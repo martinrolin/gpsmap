@@ -74,7 +74,9 @@ function datepickerCallback(){
 
     if (formatDate(Date.now()) == $('#datepicker').val()) {
       timer = setInterval(getData, 10000);
-    }    
+    }
+
+    autofitmap = true;
 }
 
 function getData(){
@@ -203,7 +205,10 @@ function gpsDataCallback() {
       }
 
     }
-
-    map.fitBounds(bounds);
+    if (autofitmap) {
+      map.fitBounds(bounds);
+      autofitmap = false;
+      bounds = new google.maps.LatLngBounds();
+    }
   }
 }
