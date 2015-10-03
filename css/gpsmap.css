@@ -13,5 +13,6 @@ div.ui-datepicker{
   padding-top: 1px;
   padding-left: 6px;
   z-index: 99;
+  font-size: :11px;
 }
 

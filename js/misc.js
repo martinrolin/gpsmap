@@ -1,8 +1,13 @@
 var palette = ['#2980b9', '#8e44ad', '#2c3e50', '#f39c12', '#d35400', '#c0392b', '#16a085', '#27ae60'];
 var icon = {
   comment: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-  active: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-  last: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+  active: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+  end: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+  start: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+};
+var settings = {
+  maxTimeBetweenPoints: 120
+
 };
 var datepickerSettings = {
   closeText: 'Stäng',
@@ -39,9 +44,9 @@ function formatDateTime(date) {
   var year = d.getFullYear();
   var hour = d.getHours();
   var minute = d.getMinutes();
-  var minute = d.getSeconds();
+  var second = d.getSeconds();
 
-  return [year, pad(month, 2), pad(day, 2)].join('-') + ' ' + [pad(hour,2), pad(minute, 2), pad(minute, 2)].join(':');
+  return [year, pad(month, 2), pad(day, 2)].join('-') + ' ' + [pad(hour,2), pad(minute, 2), pad(second, 2)].join(':');
 }
 
 function pad(num, size) {
