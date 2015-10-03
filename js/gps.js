@@ -13,6 +13,9 @@ var timer;
 var lastUpdate;
 var colorindex = 0;
 
+var bounds = new google.maps.LatLngBounds();
+var autofitmap = true;
+
 function load() {
   
   $.datepicker.setDefaults(datepickerSettings);
@@ -125,6 +128,8 @@ function gpsDataCallback() {
 
         var pointPosition = new google.maps.LatLng(jsondata[id].Points[p].Lat,jsondata[id].Points[p].Lon);
 
+        bounds.extend(pointPosition);
+
         if (typeof previouspoint[jsondata[id].Identifier] === 'undefined' ) {
 
           markers[jsondata[id].Identifier].push(new google.maps.Marker({
@@ -198,5 +203,7 @@ function gpsDataCallback() {
       }
 
     }
+
+    map.fitBounds(bounds);
   }
 }

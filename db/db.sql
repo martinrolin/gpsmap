@@ -8,5 +8,6 @@ CREATE TABLE `Points` (
   `Identifier` varchar(128) NOT NULL,
   `Tag` varchar(128) DEFAULT NULL,
   `Comment` varchar(128) DEFAULT NULL,
+  `Accuracy` float(6,1) DEFAULT NULL
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8

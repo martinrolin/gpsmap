@@ -6,7 +6,7 @@ var icon = {
   start: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
 };
 var settings = {
-  maxTimeBetweenPoints: 120
+  maxTimeBetweenPoints: 900
 
 };
 var datepickerSettings = {
