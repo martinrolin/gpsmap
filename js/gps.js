@@ -49,6 +49,9 @@ function resetMap() {
       polylines[id][p].setMap(null);
     } 
   }
+  
+  previoustime = [];
+  previouspoint = [];
 
   for (var id in comments) {
     comments[id].setMap(null);
