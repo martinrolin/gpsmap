@@ -125,7 +125,8 @@ function gpsDataCallback() {
 
         speeds[jsondata[id].Identifier] = [];
 
-        previoustime[jsondata[id].Identifier] = new Date('1900-01-01');
+        previoustime[jsondata[id].Identifier] = new Date('2000-01-01');
+
       }
       
       for (var p in jsondata[id].Points) {
@@ -137,22 +138,22 @@ function gpsDataCallback() {
         if (typeof previouspoint[jsondata[id].Identifier] === 'undefined' ) {
 
           markers[jsondata[id].Identifier].push(new google.maps.Marker({
-            title:formatDateTime(jsondata[id].Points[p].Time + ' UTC') + '\n' + jsondata[id].Name,
+            title:formatDateTime(jsondata[id].Points[p].Time) + '\n' + jsondata[id].Name,
             map: map,
             icon:icon.start,
             position:pointPosition
           }));
 
-          pathstarttime[jsondata[id].Identifier] = new Date(jsondata[id].Points[p].Time + ' UTC');
+          pathstarttime[jsondata[id].Identifier] = new Date(jsondata[id].Points[p].Time);
                     
-        } else if ((new Date(jsondata[id].Points[p].Time + ' UTC').getTime() - previoustime[jsondata[id].Identifier].getTime())/1000 > settings.maxTimeBetweenPoints ) {
-          
+        } else if ((new Date(jsondata[id].Points[p].Time).getTime() - previoustime[jsondata[id].Identifier].getTime())/1000 > settings.maxTimeBetweenPoints ) {
           var seconds = (previoustime[jsondata[id].Identifier].getTime() - pathstarttime[jsondata[id].Identifier].getTime())/1000;
           var distance = Math.round(google.maps.geometry.spherical.computeLength(polylines[jsondata[id].Identifier][polylines[jsondata[id].Identifier].length-1].getPath().getArray()));
           var kmh = Math.round((distance / seconds) * 36)/10;
           var minkm = Math.floor((100/ 6) / (distance / seconds)) + ':' + pad(Math.round((((100/ 6) / (distance / seconds)) % 1)*60,2));
  
           markers[jsondata[id].Identifier].push(new google.maps.Marker({
+
             title:formatDateTime(previoustime[jsondata[id].Identifier]) + '\n' + jsondata[id].Name + "\nTotal distans: " + distance + " m\nHastighet:      " + kmh + " km/h\nTempo:           " + minkm + " min/km",
             map: map,
             icon:icon.end,
@@ -160,7 +161,7 @@ function gpsDataCallback() {
           }));
 
           markers[jsondata[id].Identifier].push(new google.maps.Marker({
-            title:formatDateTime(jsondata[id].Points[p].Time + ' UTC') + '\n' + jsondata[id].Name,
+            title:formatDateTime(jsondata[id].Points[p].Time) + '\n' + jsondata[id].Name,
             map: map,
             icon:icon.start,
             position:pointPosition
@@ -173,19 +174,18 @@ function gpsDataCallback() {
             map: map
           }));
 
-          pathstarttime[jsondata[id].Identifier] = new Date(jsondata[id].Points[p].Time + ' UTC');
+          pathstarttime[jsondata[id].Identifier] = new Date(jsondata[id].Points[p].Time);
 
         } 
 
         previouspoint[jsondata[id].Identifier] = pointPosition;
-        previoustime[jsondata[id].Identifier] = new Date(jsondata[id].Points[p].Time + ' UTC');
-
+        previoustime[jsondata[id].Identifier] = new Date(jsondata[id].Points[p].Time);
         polylines[jsondata[id].Identifier][polylines[jsondata[id].Identifier].length-1].getPath().push(pointPosition);
         markers[jsondata[id].Identifier][0].setPosition(pointPosition);
         
         if (jsondata[id].Points[p].Comment != ''){
             comments.push(new google.maps.Marker({
-              title:formatDateTime(jsondata[id].Points[p].Time + ' UTC') + '\n' + jsondata[id].Name + ': ' + jsondata[id].Points[p].Comment,
+              title:formatDateTime(jsondata[id].Points[p].Time) + '\n' + jsondata[id].Name + ': ' + jsondata[id].Points[p].Comment,
               position:pointPosition,
               map: map,
               icon:icon.comment
@@ -193,11 +193,11 @@ function gpsDataCallback() {
 
         }
       }
-      var seconds = (new Date(jsondata[id].Points[jsondata[id].Points.length-1].Time + ' UTC').getTime() - pathstarttime[jsondata[id].Identifier].getTime())/1000;
+      var seconds = (new Date(jsondata[id].Points[jsondata[id].Points.length-1].Time).getTime() - pathstarttime[jsondata[id].Identifier].getTime())/1000;
       var distance = Math.round(google.maps.geometry.spherical.computeLength(polylines[jsondata[id].Identifier][polylines[jsondata[id].Identifier].length-1].getPath().getArray()));
       var kmh = Math.round((distance / seconds) * 36)/10;
       var minkm = Math.floor((100/ 6) / (distance / seconds)) + ':' + pad(Math.round((((100/ 6) / (distance / seconds)) % 1)*60,2));
-      markers[jsondata[id].Identifier][0].setTitle(formatDateTime(jsondata[id].Points[jsondata[id].Points.length-1].Time + ' UTC') + '\n' + jsondata[id].Name + "\nTotal distans: " + distance + " m\nHastighet:      " + kmh + " km/h\nTempo:           " + minkm + " min/km" );
+      markers[jsondata[id].Identifier][0].setTitle(formatDateTime(jsondata[id].Points[jsondata[id].Points.length-1].Time) + '\n' + jsondata[id].Name + "\nTotal distans: " + distance + " m\nHastighet:      " + kmh + " km/h\nTempo:           " + minkm + " min/km" );
     }
 
     var size = 0;
@@ -211,15 +211,15 @@ function gpsDataCallback() {
     $('#userlist').height((size * 20) + 'px');
 
     for (var id in polylines) {
-      if ((new Date().getTime() - new Date(jsondata[id].Points[jsondata[id].Points.length -1].Time + ' UTC').getTime())/1000 > settings.maxTimeBetweenPoints) {
-        markers[jsondata[id].Identifier][0].setIcon(icon.end);
+      if ((new Date().getTime() - new Date(previoustime[id]).getTime())/1000 > settings.maxTimeBetweenPoints) {
+        markers[id][0].setIcon(icon.end);
       } else {
-        markers[jsondata[id].Identifier][0].setIcon(icon.active);
+        markers[id][0].setIcon(icon.active);
       }
     }
 
 
-    if (autofitmap) {
+    if (autofitmap && !bounds.isEmpty()) {
       map.fitBounds(bounds);
       autofitmap = false;
       bounds = new google.maps.LatLngBounds();

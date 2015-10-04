@@ -23,7 +23,8 @@ if ($result->num_rows > 0) {
         if (!is_null($row['Comment'])){
             $comment = utf8_encode($row['Comment']);
         }
-	   if (!array_key_exists($row['Identifier'],$tojson)) {
+        $row['Time'] = str_replace(' ','T',$row['Time']) . ".000+00:00";
+        if (!array_key_exists($row['Identifier'],$tojson)) {
             $tojson[$row['Identifier']] = ['Name' => utf8_encode($row['Name']), 'Identifier' => $row['Identifier'], 'Points' => [['Time' => $row['Time'], 'Lat' => $row['Lat'], 'Lon' => $row['Lon'], 'Speed' => $row['Speed'], 'Comment' => $comment]]];
         } else {
             $tojson[$row['Identifier']]['Points'][count($tojson[$row['Identifier']]['Points'])] = ['Time' => $row['Time'], 'Lat' => $row['Lat'], 'Lon' => $row['Lon'], 'Speed' => $row['Speed'], 'Comment' => $comment];
