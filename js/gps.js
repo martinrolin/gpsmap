@@ -8,6 +8,8 @@ var previoustime = [];
 var pathstarttime = [];
 var color = [];
 
+var names = [];
+
 var xmlhttp = new XMLHttpRequest();
 var timer;
 var lastUpdate;
@@ -63,6 +65,7 @@ function resetMap() {
   polylines = [];
   speeds = [];
   comments = [];
+  names = [];
   colorindex=0;
   clearInterval(timer);
   lastUpdate = new Date($('#datepicker').val()).toJSON().toString();
@@ -111,8 +114,7 @@ function gpsDataCallback() {
           map: map
         }));
 
-
-        
+        names[jsondata[id].Name] = palette[color[jsondata[id].Identifier]];
 
         markers[jsondata[id].Identifier] = [];
         markers[jsondata[id].Identifier].push(new google.maps.Marker({
@@ -196,15 +198,27 @@ function gpsDataCallback() {
       var kmh = Math.round((distance / seconds) * 36)/10;
       var minkm = Math.floor((100/ 6) / (distance / seconds)) + ':' + pad(Math.round((((100/ 6) / (distance / seconds)) % 1)*60,2));
       markers[jsondata[id].Identifier][0].setTitle(formatDateTime(jsondata[id].Points[jsondata[id].Points.length-1].Time + ' UTC') + '\n' + jsondata[id].Name + "\nTotal distans: " + distance + " m\nHastighet:      " + kmh + " km/h\nTempo:           " + minkm + " min/km" );
+    }
 
+    var size = 0;
+    var userListHtml = '<ul>'
+    for (var name in names) {
+      userListHtml = userListHtml + '<li style=\"color:' + names[name] + '\"><span>' + name + '</span></li>';
+      size = size + 1;
+    }
+    userListHtml = userListHtml + '</ul>';
+    $('#userlist').html(userListHtml);
+    $('#userlist').height((size * 20) + 'px');
+
+    for (var id in polylines) {
       if ((new Date().getTime() - new Date(jsondata[id].Points[jsondata[id].Points.length -1].Time + ' UTC').getTime())/1000 > settings.maxTimeBetweenPoints) {
         markers[jsondata[id].Identifier][0].setIcon(icon.end);
-
       } else {
         markers[jsondata[id].Identifier][0].setIcon(icon.active);
       }
-
     }
+
+
     if (autofitmap) {
       map.fitBounds(bounds);
       autofitmap = false;

@@ -16,3 +16,31 @@ div.ui-datepicker{
   font-size: :11px;
 }
 
+#userlist {
+  position:absolute;
+  left:10px;
+  top:70px;
+  width:76px;
+  height:100px;
+  border-radius: 2px;
+  border: 1px solid white;
+  background:white;
+  padding-top: 0px;
+  padding-left: 6px;
+  z-index: 99;
+  font-size: 11px;
+  color:black;
+  font-family:  Roboto, Arial, sans-serif;
+}
+
+ul {
+  margin:5px;
+  margin-left: 10px;
+  padding: 0px;
+}
+
+span {
+  color: black;
+}
+
+

@@ -11,7 +11,8 @@
     <script src="js/gps.js"></script> 
   </head>
   <body style="margin:0px; padding:0px;" onload="load()">    
-    <input id="datepicker">    
+    <input id="datepicker">
+    <div id="userlist"></div>
     <div id="map" style="width: 100%; height: 100%"></div>
   </body>
 </html>
